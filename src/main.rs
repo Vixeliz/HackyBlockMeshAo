@@ -208,6 +208,7 @@ fn setup(
             base_color: Color::WHITE,
             base_color_texture: Some(texture_handle.0.clone()),
             alpha_mode: AlphaMode::Mask((1.0)),
+            perceptual_roughness: 1.0,
             ..default()
         }),
         transform: Transform::from_translation(Vec3::splat(-10.0)),
@@ -219,6 +220,7 @@ fn setup(
             base_color: Color::WHITE,
             base_color_texture: Some(texture_handle.0.clone()),
             alpha_mode: AlphaMode::Blend,
+            perceptual_roughness: 1.0,
             ..default()
         }),
         transform: Transform::from_translation(Vec3::splat(-10.0)),
