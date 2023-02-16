@@ -30,7 +30,7 @@ fn main() {
         .add_system_set(SystemSet::on_enter(AppState::Loading).with_system(load_assets))
         .add_system_set(SystemSet::on_update(AppState::Loading).with_system(check_loaded))
         .add_system_set(SystemSet::on_enter(AppState::Run).with_system(setup))
-        // .add_system_set(SystemSet::on_update(AppState::Run).with_system(camera_rotation_system))
+        .add_system_set(SystemSet::on_update(AppState::Run).with_system(camera_rotation_system))
         .run();
 }
 
@@ -86,6 +86,7 @@ impl MeshableVoxel for Voxel {
     fn get_visibility(&self) -> block_mesh::VoxelVisibility {
         match *self {
             Self::EMPTY_VOXEL => block_mesh::VoxelVisibility::Empty,
+            Self::A1_VOXEL => block_mesh::VoxelVisibility::Translucent,
             _ => block_mesh::VoxelVisibility::Opaque,
         }
     }
@@ -99,7 +100,7 @@ fn ao_convert(ao: Vec<u8>, num_vertices: usize) -> Vec<[f32; 4]> {
             1 => res.extend_from_slice(&[[0.3, 0.3, 0.3, 1.0]]),
             2 => res.extend_from_slice(&[[0.5, 0.5, 0.5, 1.0]]),
             3 => res.extend_from_slice(&[[0.75, 0.75, 0.75, 1.0]]),
-            _ => res.extend_from_slice(&[[1., 1., 1., 1.]]),
+            _ => res.extend_from_slice(&[[1., 1., 1., 1.0]]),
         }
     }
     return res;
@@ -203,7 +204,12 @@ fn setup(
 
     commands.spawn(PbrBundle {
         mesh: meshes.add(render_mesh),
-        material: materials.add(texture_handle.0.clone().into()),
+        material: materials.add(StandardMaterial {
+            base_color: Color::WHITE,
+            base_color_texture: Some(texture_handle.0.clone()),
+            alpha_mode: AlphaMode::Mask((0.5)),
+            ..default()
+        }),
         transform: Transform::from_translation(Vec3::splat(-10.0)),
         ..Default::default()
     });
