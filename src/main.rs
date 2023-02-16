@@ -227,15 +227,16 @@ fn setup(
         ..Default::default()
     });
 
-    // commands.spawn(PointLightBundle {
-    //     transform: Transform::from_translation(Vec3::new(0.0, 50.0, 50.0)),
-    //     point_light: PointLight {
-    //         range: 200.0,
-    //         intensity: 20000.0,
-    //         ..Default::default()
-    //     },
-    //     ..Default::default()
-    // });
+    commands.spawn(PointLightBundle {
+        transform: Transform::from_translation(Vec3::new(0.0, 50.0, 50.0)),
+        point_light: PointLight {
+            range: 200.0,
+            intensity: 50000.0,
+            shadows_enabled: true,
+            ..Default::default()
+        },
+        ..Default::default()
+    });
     let camera = commands.spawn(Camera3dBundle::default()).id();
     commands.insert_resource(CameraRotationState::new(camera));
     commands.insert_resource(AmbientLight {
