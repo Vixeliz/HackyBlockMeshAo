@@ -203,11 +203,22 @@ fn setup(
     render_mesh.set_indices(Some(Indices::U32(indices)));
 
     commands.spawn(PbrBundle {
+        mesh: meshes.add(render_mesh.clone()),
+        material: materials.add(StandardMaterial {
+            base_color: Color::WHITE,
+            base_color_texture: Some(texture_handle.0.clone()),
+            alpha_mode: AlphaMode::Mask((1.0)),
+            ..default()
+        }),
+        transform: Transform::from_translation(Vec3::splat(-10.0)),
+        ..Default::default()
+    });
+    commands.spawn(PbrBundle {
         mesh: meshes.add(render_mesh),
         material: materials.add(StandardMaterial {
             base_color: Color::WHITE,
             base_color_texture: Some(texture_handle.0.clone()),
-            alpha_mode: AlphaMode::Mask((0.5)),
+            alpha_mode: AlphaMode::Blend,
             ..default()
         }),
         transform: Transform::from_translation(Vec3::splat(-10.0)),
